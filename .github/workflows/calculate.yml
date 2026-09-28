@@ -1,0 +1,45 @@
+name: 15-Minute Compute Job
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch: # Cho phép bấm nút "Run workflow" bất kỳ lúc nào từ web
+
+jobs:
+  heavy-calculation:
+    runs-on: ubuntu-latest
+    name: Run Monte Carlo Pi Simulation (15 Mins)
+
+    steps:
+      - name: 1. Tải mã nguồn từ Repo
+        uses: actions/checkout@v4
+
+      - name: 2. Thiết lập môi trường Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 3. Chạy tính toán (15 phút)
+        env:
+          PYTHONUNBUFFERED: "1" # Đảm bảo log xuất hiện tức thì theo thời gian thực trên màn hình GitHub
+        run: |
+          python compute_pi.py
+
+      - name: 4. Hiển thị báo cáo lên trang tổng quan GitHub Actions
+        if: always()
+        run: |
+          if [ -f result.txt ]; then
+            echo "### 📊 Báo cáo kết quả tính toán trên máy chủ GitHub" >> $GITHUB_STEP_SUMMARY
+            echo '```text' >> $GITHUB_STEP_SUMMARY
+            cat result.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 5. Lưu trữ kết quả (Artifacts) để tải về
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: calculation-results
+          path: |
+            result.txt
+            summary.json
