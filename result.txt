@@ -1,7 +1,0 @@
-=== KET QUA TINH TOAN TU MAY CHU GITHUB ===
-Thoi gian hoan thanh: 2026-09-28 15:44:40
-Tong thoi gian: 1.85s
-Tong so diem mo phong: 9,500,000
-So Pi tinh duoc: 3.1416050526
-So Pi chuan:     3.1415926536
-Do lech:         0.0000123990
